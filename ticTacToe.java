@@ -33,6 +33,7 @@ public class ticTacToe {
 	private JButton[] button = new JButton[9];
 	private int xWins = 0;
 	private int oWins = 0;
+	private Point frameLocation = new Point(0,0);
 	
 	//Constructors:
 	public ticTacToe() {
@@ -319,53 +320,14 @@ public class ticTacToe {
 			board[buttonIndex] = letter; //places letter into the array
 		} 
 	}
-	
-	//checks to see if there is a win on the board, executed after every opponent and human move
-	private String winCheck() {
-		//return either x, o, or null
-		for(int i = 0; i < 8; i++) {
-			String winLine = null;
-			switch(i) {
-			case(0): 
-				winLine = board[0] + board[1] + board[2];
-				break;
-			case(1): 
-				winLine = board[0] + board[3] + board[6];
-				break;
-			case(2): 
-				winLine = board[0] + board[4] + board[8];
-				break;
-			case(3): 
-				winLine = board[1] + board[4] + board[7];
-				break;
-			case(4): 
-				winLine = board[2] + board[5] + board[8];
-				break;
-			case(5): 
-				winLine = board[2] + board[4] + board[6];
-				break;
-			case(6): 
-				winLine = board[3] + board[4] + board[5];
-				break;
-			case(7): 
-				winLine = board[6] + board[7] + board[8];
-				break;
-			}
-			if(winLine.equals("XXX")) {
-				return "X"; //X wins
-			} else if(winLine.equals("OOO")) {
-				return "O"; //O wins
-			} 
-		}
-		return null; //no winners
-	}
-	
+
 	//checks to see if any space is open by seeing if any cell is "filled with" null
+	//true if available, false otherwise
 	private boolean spacesAvailable() {
-		boolean avail = false;
+		boolean avail = false; //starts off saying "nothing's available"
 		for(int i = 0; i < board.length; i++) {
 			if(board[i] == null) {
-				avail = true;
+				avail = true; //once something is available avail is set to true
 			}
 		}
 		return avail;
@@ -378,6 +340,7 @@ public class ticTacToe {
 	       frame.setResizable(false);
 	       frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	       frame.setSize(600, 600);
+	       frame.setLocation(frameLocation); //defaults to 0 but updates upon a new game to wherever the frame is
 	       
 	       JPanel pane = new JPanel(new GridBagLayout());
 	       GridBagConstraints c = new GridBagConstraints();
@@ -396,13 +359,13 @@ public class ticTacToe {
 	       //the ActionListener gives the button something to do when clicked
 	       ActionListener but0 = new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				placeLetter(button[0], playerLetter);
+				placeLetter(button[0], playerLetter); //places the letter
 				if(winCheck() != null) {
-					win(winCheck());
+					win(winCheck()); //checks to see if user has won
 				}
-				opponentTurn();
+				opponentTurn(); //plays for the opponent
 				if(winCheck() != null) {
-					win(winCheck());
+					win(winCheck()); //checks to see if the opponent won
 				}
 			}
 	       };
@@ -575,6 +538,7 @@ public class ticTacToe {
 	       };
 	       button[8].addActionListener(but8);
 	       
+	       //displays win count for each letter
 	       score = new JLabel("X: " + xWins + "    O: " +oWins);
 	       score.setSize(40, 15);
 	       c.weightx = 0;
@@ -583,12 +547,14 @@ public class ticTacToe {
 	       c.gridy = 3;
 	       pane.add(score, c);
 	       
+	       //says "X wins" or "O wins" upon win
 	       gameResult = new JLabel("");
 	       gameResult.setSize(40, 15);
 	       c.gridx = 1;
 	       c.gridy = 3;
 	       pane.add(gameResult, c);
 	       
+	       //creates a new game when clicked
 	       newGameButton = new JButton("New Game?");
 	       newGameButton.setSize(40, 15);
 	       c.weightx = 0;
@@ -608,6 +574,46 @@ public class ticTacToe {
 	       pane.setOpaque(true);
 	       frame.getContentPane().add(pane);
 	       frame.setVisible(true);
+	}
+	
+	//checks to see if there is a win on the board, executed after every opponent and human move
+	private String winCheck() {
+		//return either x, o, or null
+		for(int i = 0; i < 8; i++) {
+			String winLine = null;
+			switch(i) {
+			case(0): 
+				winLine = board[0] + board[1] + board[2];
+				break;
+			case(1): 
+				winLine = board[0] + board[3] + board[6];
+				break;
+			case(2): 
+				winLine = board[0] + board[4] + board[8];
+				break;
+			case(3): 
+				winLine = board[1] + board[4] + board[7];
+				break;
+			case(4): 
+				winLine = board[2] + board[5] + board[8];
+				break;
+			case(5): 
+				winLine = board[2] + board[4] + board[6];
+				break;
+			case(6): 
+				winLine = board[3] + board[4] + board[5];
+				break;
+			case(7): 
+				winLine = board[6] + board[7] + board[8];
+				break;
+			}
+			if(winLine.equals("XXX")) {
+				return "X"; //X wins
+			} else if(winLine.equals("OOO")) {
+				return "O"; //O wins
+			} 
+		}
+		return null; //no winners
 	}
 	
 	//if there is a win a whole series of things have to be done
@@ -634,6 +640,7 @@ public class ticTacToe {
 	
 	//destroy the old board and make a new one (reset)
 	private void newGame() {
+		frameLocation = frame.getLocation(); //sets the location for when the frame respawns
 		frame.dispose(); //deletes the frame
 		for(int i = 0; i < board.length; i++) {
 			board[i] = null; //resets the array
