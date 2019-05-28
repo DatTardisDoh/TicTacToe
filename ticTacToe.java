@@ -34,6 +34,7 @@ public class ticTacToe {
 	private int xWins = 0;
 	private int oWins = 0;
 	private Point frameLocation = new Point(0,0);
+	private boolean userFirst;
 	
 	//Constructors:
 	public ticTacToe() {
@@ -333,6 +334,19 @@ public class ticTacToe {
 		return avail;
 	}
 	
+	private void turn(int index) {
+		placeLetter(button[index], playerLetter); //places the letter
+		if(winCheck() != null) {
+			win(winCheck()); //checks to see if user has won
+		}
+		opponentTurn(); //plays for the opponent
+		if(winCheck() != null) {
+			win(winCheck()); //checks to see if the opponent won
+		}
+		if(spacesAvailable() == false) {
+			draw();
+		}
+	}
 	//creates the main window that is played
 	//a large part of the program is found here
 	private void makeWindow() {
@@ -345,6 +359,13 @@ public class ticTacToe {
 	       JPanel pane = new JPanel(new GridBagLayout());
 	       GridBagConstraints c = new GridBagConstraints();
 	       
+	       //to see if the user or computer goes first:
+	       Random r = new Random();
+	       if(r.nextInt(2) == 0) {
+	    	   userFirst = true;
+	       } else {
+	    	   userFirst = false;
+	       }
 
 	       button[0] = new JButton(board[0]);
 	       button[0].setName("0"); //sets the name to the corresponding index
@@ -359,14 +380,7 @@ public class ticTacToe {
 	       //the ActionListener gives the button something to do when clicked
 	       ActionListener but0 = new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				placeLetter(button[0], playerLetter); //places the letter
-				if(winCheck() != null) {
-					win(winCheck()); //checks to see if user has won
-				}
-				opponentTurn(); //plays for the opponent
-				if(winCheck() != null) {
-					win(winCheck()); //checks to see if the opponent won
-				}
+				turn(0);
 			}
 	       };
 	       button[0].addActionListener(but0);
@@ -379,15 +393,7 @@ public class ticTacToe {
 	       pane.add(button[1], c);
 	       ActionListener but1 = new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				placeLetter(button[1], playerLetter);
-				if(winCheck() != null) {
-					win(winCheck());
-				}
-				opponentTurn();
-				if(winCheck() != null) {
-					win(winCheck());
-				}
-				
+				turn(1);
 			}
 	       };
 	       button[1].addActionListener(but1);
@@ -401,14 +407,7 @@ public class ticTacToe {
 	       ActionListener but2 = new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				placeLetter(button[2], playerLetter);
-				if(winCheck() != null) {
-					win(winCheck());
-				}
-				opponentTurn();
-				if(winCheck() != null) {
-					win(winCheck());
-				}
-				
+				turn(2);
 			}
 	       };
 	       button[2].addActionListener(but2);
@@ -422,14 +421,7 @@ public class ticTacToe {
 	       ActionListener but3 = new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				placeLetter(button[3], playerLetter);
-				if(winCheck() != null) {
-					win(winCheck());
-				}
-				opponentTurn();
-				if(winCheck() != null) {
-					win(winCheck());
-				}
-				
+				turn(3);
 			}
 	       };
 	       button[3].addActionListener(but3);
@@ -442,15 +434,7 @@ public class ticTacToe {
 	       pane.add(button[4], c);
 	       ActionListener but4 = new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				placeLetter(button[4], playerLetter);
-				if(winCheck() != null) {
-					win(winCheck());
-				}
-				opponentTurn();
-				if(winCheck() != null) {
-					win(winCheck());
-				}
-				
+				turn(4);
 			}
 	       };
 	       button[4].addActionListener(but4);
@@ -463,15 +447,7 @@ public class ticTacToe {
 	       pane.add(button[5], c);
 	       ActionListener but5 = new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				placeLetter(button[5], playerLetter);
-				if(winCheck() != null) {
-					win(winCheck());
-				}
-				opponentTurn();
-				if(winCheck() != null) {
-					win(winCheck());
-				}
-				
+				turn(5);
 			}
 	       };
 	       button[5].addActionListener(but5);
@@ -484,14 +460,7 @@ public class ticTacToe {
 	       pane.add(button[6], c);
 	       ActionListener but6 = new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				placeLetter(button[6], playerLetter);
-				if(winCheck() != null) {
-					win(winCheck());
-				}
-				opponentTurn();
-				if(winCheck() != null) {
-					win(winCheck());
-				}
+				turn(6);
 			}
 	       };
 	       button[6].addActionListener(but6);
@@ -504,15 +473,7 @@ public class ticTacToe {
 	       pane.add(button[7], c);
 	       ActionListener but7 = new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				placeLetter(button[7], playerLetter);
-				if(winCheck() != null) {
-					win(winCheck());
-				}
-				opponentTurn();
-				if(winCheck() != null) {
-					win(winCheck());
-				}
-				
+				turn(7);
 			}
 	       };
 	       button[7].addActionListener(but7);
@@ -525,15 +486,7 @@ public class ticTacToe {
 	       pane.add(button[8], c);
 	       ActionListener but8 = new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				placeLetter(button[8], playerLetter);
-				if(winCheck() != null) {
-					win(winCheck());
-				}
-				opponentTurn();
-				if(winCheck() != null) {
-					win(winCheck());
-				}
-				
+				turn(8);
 			}
 	       };
 	       button[8].addActionListener(but8);
@@ -574,6 +527,10 @@ public class ticTacToe {
 	       pane.setOpaque(true);
 	       frame.getContentPane().add(pane);
 	       frame.setVisible(true);
+	       
+	       if(userFirst == false) {
+	    	   opponentTurn(); //starts off by having computer play, then everything goes as normal
+	       }
 	}
 	
 	//checks to see if there is a win on the board, executed after every opponent and human move
